@@ -1,6 +1,12 @@
 name: Build Images
 
-on: [push]
+on:
+  push:
+    branches: master
+  pull_request:
+      paths:
+        - docker-compose.yml
+        - services
 
 jobs:
   build:
@@ -8,12 +14,11 @@ jobs:
       matrix:
         profile:
           - auto
-          - hlky
-          - lstein
+          - sygil
+          - invoke
           - download
     runs-on: ubuntu-latest
     name: ${{ matrix.profile }}
     steps:
       - uses: actions/checkout@v3
-      # better caching?
       - run: docker compose --profile ${{ matrix.profile }} build --progress plain

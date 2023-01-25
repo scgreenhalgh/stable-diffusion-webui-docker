@@ -2,4 +2,5 @@
 
 set -Eeuo pipefail
 
-find . -name "*.sh" -exec git update-index --chmod=+x {} \;
+find services -name "*.sh" -exec git update-index --chmod=+x {} \;
+find .devscripts -name "*.sh" -exec git update-index --chmod=+x {} \;

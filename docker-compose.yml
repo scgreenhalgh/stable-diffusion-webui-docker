@@ -23,20 +23,13 @@ services:
     volumes:
       - *v1
 
-  hlky:
-    <<: *base_service
-    profiles: ["hlky"]
-    build: ./services/hlky/
-    environment:
-      - CLI_ARGS=--optimized-turbo
-      - USE_STREAMLIT=0
-
   auto: &automatic
     <<: *base_service
     profiles: ["auto"]
     build: ./services/AUTOMATIC1111
+    image: sd-auto:38
     environment:
-      - CLI_ARGS=--allow-code --medvram --xformers
+      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
 
   auto-cpu:
     <<: *automatic
@@ -45,10 +38,27 @@ services:
     environment:
       - CLI_ARGS=--no-half --precision full
 
-  lstein:
+  invoke:
     <<: *base_service
-    profiles: ["lstein"]
-    build: ./services/lstein/
+    profiles: ["invoke"]
+    build: ./services/invoke/
+    image: sd-invoke:19
     environment:
       - PRELOAD=true
       - CLI_ARGS=
+
+
+  sygil: &sygil
+    <<: *base_service
+    profiles: ["sygil"]
+    build: ./services/sygil/
+    image: sd-sygil:16
+    environment:
+      - CLI_ARGS=--optimized-turbo
+      - USE_STREAMLIT=0
+
+  sygil-sl:
+    <<: *sygil
+    profiles: ["sygil-sl"]
+    environment:
+      - USE_STREAMLIT=1
